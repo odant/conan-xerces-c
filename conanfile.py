@@ -13,7 +13,7 @@ class XercesConan(ConanFile):
     url = "https://github.com/odant/conan-xerces-c"
     settings = "os", "compiler", "build_type", "arch"
     generators = "cmake"
-    exports_sources = "src/*", "CMakeLists.txt", "build.patch"
+    exports_sources = "src/*", "CMakeLists.txt", "build.patch", "FindXercesC.cmake"
     no_copy_source = True
     build_policy = "missing"
 
@@ -46,10 +46,10 @@ class XercesConan(ConanFile):
         cmake.install()
 
     def package(self):
+        self.copy("FindXercesC.cmake", dst=".", src=".", keep_path=False)
         self.copy("*xerces-c.pdb", dst="bin", keep_path=False)
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
         if self.settings.os != "Windows":
             self.cpp_info.libs.append("pthread")
-
