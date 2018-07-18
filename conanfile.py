@@ -1,8 +1,8 @@
-# xerces-c Conan package
+# Xerces-C++ Conan package
 # Dmitriy Vetutnev, ODANT, 2018
 
 
-from conans import ConanFile, CMake
+from conans import ConanFile, CMake, tools
 
 
 class XercesConan(ConanFile):
