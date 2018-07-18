@@ -13,7 +13,7 @@ class XercesConan(ConanFile):
     url = "https://github.com/odant/conan-xerces-c"
     settings = "os", "compiler", "build_type", "arch"
     generators = "cmake"
-    exports_sources = "src/*", "CMakeLists.txt"
+    exports_sources = "src/*", "CMakeLists.txt", "build.patch"
     no_copy_source = True
     build_policy = "missing"
 
@@ -23,6 +23,9 @@ class XercesConan(ConanFile):
 
     def requirements(self):
         self.requires("icu/61.1@odant/testing")
+
+    def source(self):
+        tools.patch(patch_file="build.patch")
 
     def build(self):
         build_type = "RelWithDebInfo" if self.settings.build_type == "Release" else "Debug"
