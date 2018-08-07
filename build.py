@@ -15,7 +15,7 @@ def add_dll_sign(builds):
     result = []
     for settings, options, env_vars, build_requires, reference in builds:
         options = deepcopy(options)
-        opt_name = "%s:dll_sign" % package_name
+        opt_name = "icu:dll_sign"
         options[opt_name] = dll_sign
         result.append([settings, options, env_vars, build_requires, reference])
     return result
