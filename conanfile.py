@@ -22,7 +22,7 @@ class XercesConan(ConanFile):
             raise Exception("This package is only compatible with libstdc++11")
 
     def requirements(self):
-        self.requires("icu/61.1@odant/testing")
+        self.requires("icu/61.1@odant/stable")
 
     def source(self):
         tools.patch(patch_file="build.patch")
