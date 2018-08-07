@@ -20,6 +20,9 @@ add_test(
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin
     COMMAND CreateDOMDocument_CONAN_PKG
 )
+if(UNIX)
+    set_property(TEST CreateDOMDocument_CONAN_PKG PROPERTY ENVIRONMENT LD_DEBUG=libs LD_LIBRARY_PATH=${CMAKE_BINARY_DIR}/bin)
+endif()
 
 
 # Normal imported targets
@@ -32,3 +35,6 @@ add_test(
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin
     COMMAND CreateDOMDocument
 )
+if(UNIX)
+    set_property(TEST CreateDOMDocument PROPERTY ENVIRONMENT LD_DEBUG=libs LD_LIBRARY_PATH=${CMAKE_BINARY_DIR}/bin)
+endif()
