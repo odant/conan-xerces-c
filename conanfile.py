@@ -3,6 +3,7 @@
 
 
 from conans import ConanFile, CMake, tools
+import os, glob, shutil
 
 
 class XercesConan(ConanFile):
@@ -12,6 +13,10 @@ class XercesConan(ConanFile):
     description = "Xerces-C++ XML parser"
     url = "https://github.com/odant/conan-xerces-c"
     settings = "os", "compiler", "build_type", "arch"
+    options = {
+        "with_unit_tests": [False, True]
+    }
+    default_options = "with_unit_tests=False"
     generators = "cmake"
     exports_sources = "src/*", "CMakeLists.txt", "build.patch", "FindXercesC.cmake"
     no_copy_source = True
@@ -35,6 +40,9 @@ class XercesConan(ConanFile):
         cmake.definitions["network:BOOL"] = "OFF"
         cmake.definitions["transcoder"] = "icu"
         cmake.definitions["message-loader"] = "inmemory"
+        if self.options.with_unit_tests:
+            cmake.definitions["with_unit_tests"] = "ON"
+            cmake.definitions["AXT_WORKING_DIRECTORY"] = os.path.join(self.source_folder, "src/samples/data").replace("\\", "/")
         cmake.definitions["BUILD_SHARED_LIBS:BOOL"] = "OFF"
         if self.settings.os == "Windows":
             cmake.definitions["xmlch-type"] = "wchar_t"
@@ -44,6 +52,22 @@ class XercesConan(ConanFile):
         cmake.configure()
         cmake.build()
         cmake.install()
+        if self.options.with_unit_tests:
+            if self.settings.os == "Windows":
+                self.output.info("Import ICU DLLs")
+                icu_dll = os.path.join(self.deps_cpp_info["icu"].bin_paths[0], "*.dll")
+                build_bin = os.path.join(self.build_folder, "bin")
+                self.output.info("icu_dll: %s" % icu_dll)
+                self.output.info("build_bin: %s" % build_bin)
+                for f in glob.glob(icu_dll):
+                    self.output.info("Copy %s to %s" % (f, build_bin))
+                    shutil.copy(f, build_bin)
+                self.run("ctest --build-config %s" % self.settings.build_type)
+            else:
+                self.run("ctest")
+
+    def package_id(self):
+        self.info.options.with_unit_tests = "any"
 
     def package(self):
         self.copy("FindXercesC.cmake", dst=".", src=".", keep_path=False)

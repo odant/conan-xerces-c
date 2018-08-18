@@ -15,4 +15,6 @@ if(MSVC)
     )
 endif()
 
+enable_testing()
+
 add_subdirectory(src)

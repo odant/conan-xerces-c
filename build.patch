@@ -1,8 +1,8 @@
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index 4254f89..6b02f8b 100644
+index 4254f89..2abaa8f 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
-@@ -160,25 +160,25 @@ configure_file(
+@@ -160,25 +160,28 @@ configure_file(
    @ONLY)
  
  # Generate pkg-config file
@@ -39,8 +39,11 @@ index 4254f89..6b02f8b 100644
  add_subdirectory(src)
 -add_subdirectory(tests)
 -add_subdirectory(samples)
-+#add_subdirectory(tests)
-+#add_subdirectory(samples)
++option(with_unit_tests "" OFF)
++if(with_unit_tests)
++    add_subdirectory(tests)
++    add_subdirectory(samples)
++endif()
  
  # Display configuration summary
  message(STATUS "")
