@@ -14,9 +14,10 @@ class XercesConan(ConanFile):
     url = "https://github.com/odant/conan-xerces-c"
     settings = "os", "compiler", "build_type", "arch"
     options = {
-        "with_unit_tests": [False, True]
+        "with_unit_tests": [False, True],
+        "xmlch": [None, "char16_t", "wchar_t", "uint16_t"]
     }
-    default_options = "with_unit_tests=False"
+    default_options = "with_unit_tests=False", "xmlch=None"
     generators = "cmake"
     exports_sources = "src/*", "CMakeLists.txt", "build.patch", "FindXercesC.cmake"
     no_copy_source = True
@@ -25,6 +26,11 @@ class XercesConan(ConanFile):
     def configure(self):
         if self.settings.compiler.get_safe("libcxx") == "libstdc++":
             raise Exception("This package is only compatible with libstdc++11")
+        if self.options.xmlch is None or self.options.xmlch == "None":
+            if self.settings.os == "Windows":
+                self.options.xmlch = "wchar_t"
+            else:
+                self.options.xmlch = "char16_t"
 
     def requirements(self):
         self.requires("icu/[>=61.1]@odant/stable")
@@ -40,14 +46,13 @@ class XercesConan(ConanFile):
         cmake.definitions["network:BOOL"] = "OFF"
         cmake.definitions["transcoder"] = "icu"
         cmake.definitions["message-loader"] = "inmemory"
+        cmake.definitions["xmlch-type"] = self.options.xmlch
+        cmake.definitions["BUILD_SHARED_LIBS:BOOL"] = "OFF"
+        if self.settings.os == "Linux":
+            cmake.definitions["CMAKE_POSITION_INDEPENDENT_CODE:BOOL"] = "ON"
         if self.options.with_unit_tests:
             cmake.definitions["with_unit_tests"] = "ON"
             cmake.definitions["AXT_WORKING_DIRECTORY"] = os.path.join(self.source_folder, "src/samples/data").replace("\\", "/")
-        cmake.definitions["BUILD_SHARED_LIBS:BOOL"] = "OFF"
-        if self.settings.os == "Windows":
-            cmake.definitions["xmlch-type"] = "wchar_t"
-        if self.settings.os == "Linux":
-            cmake.definitions["CMAKE_POSITION_INDEPENDENT_CODE:BOOL"] = "ON"
         #
         cmake.configure()
         cmake.build()
