@@ -48,7 +48,7 @@ index 4254f89..2abaa8f 100644
  # Display configuration summary
  message(STATUS "")
 diff --git a/src/cmake/XercesDLL.cmake b/src/cmake/XercesDLL.cmake
-index f6c16bb..0d276eb 100644
+index 8ebb8aa..3e46160 100644
 --- a/src/cmake/XercesDLL.cmake
 +++ b/src/cmake/XercesDLL.cmake
 @@ -20,7 +20,7 @@
@@ -61,10 +61,10 @@ index f6c16bb..0d276eb 100644
  # Add a d postfix to Debug libraries on Windows
  
 diff --git a/src/src/CMakeLists.txt b/src/src/CMakeLists.txt
-index f79f458..e443f12 100644
+index c29aa25..7345c24 100644
 --- a/src/src/CMakeLists.txt
 +++ b/src/src/CMakeLists.txt
-@@ -1295,23 +1295,23 @@ install(TARGETS xerces-c
+@@ -1321,23 +1321,23 @@ install(TARGETS xerces-c
    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
    COMPONENT "runtime"
    INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
