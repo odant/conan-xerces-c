@@ -27,10 +27,7 @@ class XercesConan(ConanFile):
         if self.settings.compiler.get_safe("libcxx") == "libstdc++":
             raise Exception("This package is only compatible with libstdc++11")
         if self.options.xmlch is None or self.options.xmlch == "None":
-            if self.settings.os == "Windows":
-                self.options.xmlch = "wchar_t"
-            else:
-                self.options.xmlch = "char16_t"
+            self.options.xmlch = "char16_t"
 
     def requirements(self):
         self.requires("icu/[>=61.1]@odant/stable")
