@@ -8,7 +8,7 @@ import os, glob, shutil
 
 class XercesConan(ConanFile):
     name = "xerces-c"
-    version = "3.2.2"
+    version = "3.2.2+0"
     license = "Apache License v2.0"
     description = "Xerces-C++ XML parser"
     url = "https://github.com/odant/conan-xerces-c"
