@@ -6,6 +6,13 @@ from conans import ConanFile, CMake, tools
 import os, glob, shutil
 
 
+def get_safe(options, name):
+    try:
+        return getattr(options, name, None)
+    except ConanException:
+        return None
+
+
 class XercesConan(ConanFile):
     name = "xerces-c"
     version = "3.2.2+1"
@@ -14,10 +21,12 @@ class XercesConan(ConanFile):
     url = "https://github.com/odant/conan-xerces-c"
     settings = "os", "compiler", "build_type", "arch"
     options = {
+        "dll_sign": [True, False],
         "with_unit_tests": [False, True],
-        "xmlch": [None, "char16_t", "wchar_t", "uint16_t"]
+        "xmlch": [None, "char16_t", "wchar_t", "uint16_t"],
+        "shared": [True, False]
     }
-    default_options = "with_unit_tests=False", "xmlch=None"
+    default_options = "dll_sign=True", "with_unit_tests=False", "xmlch=None", "shared=True"
     generators = "cmake"
     exports_sources = "src/*", "CMakeLists.txt", "AddPostfix.patch", "build.patch", "FindXercesC.cmake"
     no_copy_source = True
@@ -28,6 +37,17 @@ class XercesConan(ConanFile):
             raise Exception("This package is only compatible with libstdc++11")
         if self.options.xmlch is None or self.options.xmlch == "None":
             self.options.xmlch = "char16_t"
+        # MT(d) static library
+        if self.settings.os == "Windows" and self.settings.compiler == "Visual Studio":
+            if self.settings.compiler.runtime == "MT" or self.settings.compiler.runtime == "MTd":
+                self.options.shared=False
+        # DLL sign, only Windows and shared
+        if self.settings.os != "Windows" or self.options.shared == False:
+            del self.options.dll_sign
+
+    def build_requirements(self):
+        if get_safe(self.options, "dll_sign"):
+            self.build_requires("windows_signtool/[>=1.0]@%s/stable" % self.user)
 
     def requirements(self):
         self.requires("icu/[>=61.1]@odant/stable")
@@ -45,7 +65,7 @@ class XercesConan(ConanFile):
         cmake.definitions["transcoder"] = "icu"
         cmake.definitions["message-loader"] = "inmemory"
         cmake.definitions["xmlch-type"] = self.options.xmlch
-        cmake.definitions["BUILD_SHARED_LIBS:BOOL"] = "ON"
+        cmake.definitions["BUILD_SHARED_LIBS:BOOL"] = "ON" if self.options.shared == True else "OFF"
         if self.settings.os == "Windows" and self.settings.arch == "x86_64":
             cmake.definitions["XERCES_RUNTIME_OUTPUT_POSTFIX"] = "x64"
         if self.settings.os == "Linux":
@@ -77,6 +97,17 @@ class XercesConan(ConanFile):
     def package(self):
         self.copy("FindXercesC.cmake", dst=".", src=".", keep_path=False)
         self.copy("*xerces-c.pdb", dst="bin", keep_path=False)
+        # Sign DLL
+        if get_safe(self.options, "dll_sign"):
+            import windows_signtool
+            pattern = os.path.join(self.package_folder, "bin", "*.dll")
+            for fpath in glob.glob(pattern):
+                fpath = fpath.replace("\\", "/")
+                for alg in ["sha1", "sha256"]:
+                    is_timestamp = True if self.settings.build_type == "Release" else False
+                    cmd = windows_signtool.get_sign_command(fpath, digest_algorithm=alg, timestamp=is_timestamp)
+                    self.output.info("Sign %s" % fpath)
+                    self.run(cmd)
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
