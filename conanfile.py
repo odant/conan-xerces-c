@@ -19,7 +19,7 @@ class XercesConan(ConanFile):
     }
     default_options = "with_unit_tests=False", "xmlch=None"
     generators = "cmake"
-    exports_sources = "src/*", "CMakeLists.txt", "build.patch", "FindXercesC.cmake"
+    exports_sources = "src/*", "CMakeLists.txt", "AddPostfix.patch", "build.patch", "FindXercesC.cmake"
     no_copy_source = True
     build_policy = "missing"
 
@@ -34,6 +34,7 @@ class XercesConan(ConanFile):
 
     def source(self):
         tools.patch(patch_file="build.patch")
+        tools.patch(patch_file="AddPostfix.patch")
 
     def build(self):
         build_type = "RelWithDebInfo" if self.settings.build_type == "Release" else "Debug"
@@ -44,7 +45,9 @@ class XercesConan(ConanFile):
         cmake.definitions["transcoder"] = "icu"
         cmake.definitions["message-loader"] = "inmemory"
         cmake.definitions["xmlch-type"] = self.options.xmlch
-        cmake.definitions["BUILD_SHARED_LIBS:BOOL"] = "OFF"
+        cmake.definitions["BUILD_SHARED_LIBS:BOOL"] = "ON"
+        if self.settings.os == "Windows" and self.settings.arch == "x86_64":
+            cmake.definitions["XERCES_RUNTIME_OUTPUT_POSTFIX"] = "x64"
         if self.settings.os == "Linux":
             cmake.definitions["CMAKE_POSITION_INDEPENDENT_CODE:BOOL"] = "ON"
         if self.options.with_unit_tests:
