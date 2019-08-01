@@ -68,7 +68,7 @@ class XercesConan(ConanFile):
         cmake.definitions["xmlch-type"] = self.options.xmlch
         cmake.definitions["BUILD_SHARED_LIBS:BOOL"] = "ON" if self.options.shared == True else "OFF"
         if self.settings.os == "Windows" and self.settings.arch == "x86_64":
-            cmake.definitions["XERCES_RUNTIME_OUTPUT_POSTFIX"] = "x64"
+            cmake.definitions["XERCES_RUNTIME_OUTPUT_POSTFIX"] = "_x64"
         if self.settings.os == "Linux":
             cmake.definitions["CMAKE_POSITION_INDEPENDENT_CODE:BOOL"] = "ON"
         if self.options.with_unit_tests:
