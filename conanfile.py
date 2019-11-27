@@ -16,7 +16,7 @@ def get_safe(options, name):
 
 class XercesConan(ConanFile):
     name = "xerces-c"
-    version = "3.2.2+4"
+    version = "3.2.2+5"
     license = "Apache License v2.0"
     description = "Xerces-C++ XML parser"
     url = "https://github.com/odant/conan-xerces-c"
