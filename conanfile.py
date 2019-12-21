@@ -95,7 +95,7 @@ class XercesConan(ConanFile):
 
     def package(self):
         self.copy("FindXercesC.cmake", dst=".", src=".", keep_path=False)
-        self.copy("*xerces-c.pdb", dst="bin", keep_path=False)
+        self.copy("xerces-c*.pdb", dst="bin", src="bin", keep_path=False)
         # Sign DLL
         if get_safe(self.options, "dll_sign"):
             import windows_signtool
