@@ -1,17 +1,9 @@
 # Xerces-C++ Conan package
-# Dmitriy Vetutnev, ODANT, 2018
+# Dmitriy Vetutnev, ODANT, 2018, 2020
 
 
 from conans import ConanFile, CMake, tools
-from conans.errors import ConanException
 import os, glob, shutil
-
-
-def get_safe(options, name):
-    try:
-        return getattr(options, name, None)
-    except ConanException:
-        return None
 
 
 class XercesConan(ConanFile):
@@ -27,7 +19,12 @@ class XercesConan(ConanFile):
         "xmlch": [None, "char16_t", "wchar_t", "uint16_t"],
         "shared": [True, False]
     }
-    default_options = "dll_sign=True", "with_unit_tests=False", "xmlch=None", "shared=True"
+    default_options = {
+        "dll_sign": True,
+        "with_unit_tests": False,
+        "xmlch": None,
+        "shared": True
+    }
     generators = "cmake"
     exports_sources = "src/*", "CMakeLists.txt", "build.patch", "FindXercesC.cmake"
     no_copy_source = True
@@ -47,7 +44,7 @@ class XercesConan(ConanFile):
             del self.options.dll_sign
 
     def build_requirements(self):
-        if get_safe(self.options, "dll_sign"):
+        if self.options.get_safe("dll_sign"):
             self.build_requires("windows_signtool/[>=1.1]@%s/stable" % self.user)
 
     def requirements(self):
@@ -96,7 +93,7 @@ class XercesConan(ConanFile):
         self.copy("FindXercesC.cmake", dst=".", src=".", keep_path=False)
         self.copy("xerces-c*.pdb", dst="bin", src="bin", keep_path=False)
         # Sign DLL
-        if get_safe(self.options, "dll_sign"):
+        if self.options.get_safe("dll_sign"):
             import windows_signtool
             pattern = os.path.join(self.package_folder, "bin", "*.dll")
             for fpath in glob.glob(pattern):
