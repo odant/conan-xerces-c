@@ -16,7 +16,7 @@ def get_safe(options, name):
 
 class XercesConan(ConanFile):
     name = "xerces-c"
-    version = "3.2.2+7"
+    version = "3.2.2+8"
     license = "Apache License v2.0"
     description = "Xerces-C++ XML parser"
     url = "https://github.com/odant/conan-xerces-c"
@@ -29,7 +29,7 @@ class XercesConan(ConanFile):
     }
     default_options = "dll_sign=True", "with_unit_tests=False", "xmlch=None", "shared=True"
     generators = "cmake"
-    exports_sources = "src/*", "CMakeLists.txt", "AddPostfix.patch", "build.patch", "FindXercesC.cmake"
+    exports_sources = "src/*", "CMakeLists.txt", "build.patch", "FindXercesC.cmake"
     no_copy_source = True
     build_policy = "missing"
 
@@ -55,7 +55,6 @@ class XercesConan(ConanFile):
 
     def source(self):
         tools.patch(patch_file="build.patch")
-        tools.patch(patch_file="AddPostfix.patch")
 
     def build(self):
         build_type = "RelWithDebInfo" if self.settings.build_type == "Release" else "Debug"
