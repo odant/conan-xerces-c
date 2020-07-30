@@ -1,5 +1,5 @@
-# xerces-c Conan package
-# Dmitriy Vetutnev, ODANT, 2018
+# CMake wrapper to build  Conan package
+# Dmitriy Vetutnev, Odant 2018 - 2020
 
 
 cmake_minimum_required(VERSION 3.0)
@@ -7,14 +7,5 @@ cmake_minimum_required(VERSION 3.0)
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 
-if(MSVC)
-    add_definitions(
-        -D_CRT_SECURE_NO_DEPRECATE
-        -D_CRT_SECURE_NO_WARNINGS
-        -D_SCL_SECURE_NO_WARNINGS
-    )
-endif()
-
 enable_testing()
-
 add_subdirectory(src)

@@ -14,16 +14,18 @@ class XercesConan(ConanFile):
     url = "https://github.com/odant/conan-xerces-c"
     settings = "os", "compiler", "build_type", "arch"
     options = {
+        "shared": [True, False],
         "dll_sign": [True, False],
-        "with_unit_tests": [False, True],
-        "xmlch": [None, "char16_t", "wchar_t", "uint16_t"],
-        "shared": [True, False]
+        "with_unit_tests": [True, False],
+        "ninja": [True, False],
+        "xmlch": ["char16_t", "wchar_t", "uint16_t"]
     }
     default_options = {
+        "shared": True,
         "dll_sign": True,
         "with_unit_tests": False,
-        "xmlch": None,
-        "shared": True
+        "ninja": True,
+        "xmlch": "char16_t"
     }
     generators = "cmake"
     exports_sources = "src/*", "CMakeLists.txt", "build.patch", "FindXercesC.cmake"
@@ -31,10 +33,6 @@ class XercesConan(ConanFile):
     build_policy = "missing"
 
     def configure(self):
-        if self.settings.compiler.get_safe("libcxx") == "libstdc++":
-            raise Exception("This package is only compatible with libstdc++11")
-        if self.options.xmlch is None or self.options.xmlch == "None":
-            self.options.xmlch = "char16_t"
         # MT(d) static library
         if self.settings.os == "Windows" and self.settings.compiler == "Visual Studio":
             if self.settings.compiler.runtime == "MT" or self.settings.compiler.runtime == "MTd":
@@ -44,6 +42,8 @@ class XercesConan(ConanFile):
             del self.options.dll_sign
 
     def build_requirements(self):
+        if self.options.ninja:
+            self.build_requires("ninja/1.9.0")
         if self.options.get_safe("dll_sign"):
             self.build_requires("windows_signtool/[>=1.1]@%s/stable" % self.user)
 
@@ -55,7 +55,8 @@ class XercesConan(ConanFile):
 
     def build(self):
         build_type = "RelWithDebInfo" if self.settings.build_type == "Release" else "Debug"
-        cmake = CMake(self, build_type=build_type)
+        gen = "Ninja" if self.options.ninja == True else None
+        cmake = CMake(self, build_type=build_type, generator=gen, msbuild_verbosity='normal')
         cmake.verbose = True
         #
         cmake.definitions["network:BOOL"] = "OFF"
@@ -106,5 +107,5 @@ class XercesConan(ConanFile):
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
-        if self.settings.os != "Windows":
+        if self.settings.os != "Windows" and not self.options.shared:
             self.cpp_info.libs.append("pthread")

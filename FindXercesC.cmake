@@ -9,7 +9,7 @@ find_path(XercesC_INCLUDE_DIR
 )
 
 find_library(XercesC_LIBRARY
-    NAMES xerces-c_3D xerces-c_3 xerces-c-3.2
+    NAMES xerces-c_3D xerces-c_3 xerces-c-3.2 xerces-c
     PATHS ${CONAN_LIB_DIRS_XERCES-C}
     NO_DEFAULT_PATH
 )
