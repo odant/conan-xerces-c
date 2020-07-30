@@ -3,7 +3,7 @@ env:
     CONAN_PRINT_RUN_COMMANDS: 1
     CONAN_LOG_RUN_TO_OUTPUT: 1
 
-    CONAN_REFERENCE: xerces-c/3.2.2+7
+    CONAN_REFERENCE: xerces-c/3.2.3+0
     CONAN_USERNAME: odant
     CONAN_CHANNEL: testing
     CONAN_STABLE_CHANNEL: stable
@@ -12,12 +12,14 @@ env:
     CONAN_LOGIN_USERNAME: travis
     CONAN_STABLE_BRANCH_PATTERN: release/*
 
+    CONAN_OPTIONS: xerces-c:with_unit_tests=True
+    CONAN_PURE_C: False
+
 linux: &linux_build
   os: linux
-  dist: trusty
-  sudo: false
+  dist: bionic
   language: python
-  python: 2.7
+  python: 3.7
   services:
     - docker
 
@@ -26,25 +28,113 @@ matrix:
     - <<: *linux_build
       env:
        CONAN_GCC_VERSIONS: 6
-       CONAN_DOCKER_IMAGE: lasote/conangcc63
+       CONAN_DOCKER_IMAGE: conanio/gcc6
+       CONAN_BUILD_TYPES: Release
        CONAN_ARCHS: x86_64
 
     - <<: *linux_build
       env:
        CONAN_GCC_VERSIONS: 6
-       CONAN_DOCKER_IMAGE: lasote/conangcc63
+       CONAN_DOCKER_IMAGE: conanio/gcc6
+       CONAN_BUILD_TYPES: Debug
+       CONAN_ARCHS: x86_64
+
+    - <<: *linux_build
+      env:
+       CONAN_GCC_VERSIONS: 6
+       CONAN_DOCKER_IMAGE: conanio/gcc6
+       CONAN_BUILD_TYPES: Release
+       CONAN_ARCHS: x86
+
+    - <<: *linux_build
+      env:
+       CONAN_GCC_VERSIONS: 6
+       CONAN_DOCKER_IMAGE: conanio/gcc6
+       CONAN_BUILD_TYPES: Debug
        CONAN_ARCHS: x86
 
     - <<: *linux_build
       env:
        CONAN_GCC_VERSIONS: 7
-       CONAN_DOCKER_IMAGE: lasote/conangcc72
+       CONAN_DOCKER_IMAGE: conanio/gcc7
+       CONAN_BUILD_TYPES: Release
        CONAN_ARCHS: x86_64
 
     - <<: *linux_build
       env:
        CONAN_GCC_VERSIONS: 7
-       CONAN_DOCKER_IMAGE: lasote/conangcc72
+       CONAN_DOCKER_IMAGE: conanio/gcc7
+       CONAN_BUILD_TYPES: Debug
+       CONAN_ARCHS: x86_64
+
+    - <<: *linux_build
+      env:
+       CONAN_GCC_VERSIONS: 7
+       CONAN_DOCKER_IMAGE: conanio/gcc7
+       CONAN_BUILD_TYPES: Release
+       CONAN_ARCHS: x86
+
+    - <<: *linux_build
+      env:
+       CONAN_GCC_VERSIONS: 7
+       CONAN_DOCKER_IMAGE: conanio/gcc7
+       CONAN_BUILD_TYPES: Debug
+       CONAN_ARCHS: x86
+
+    - <<: *linux_build
+      env:
+       CONAN_GCC_VERSIONS: 8
+       CONAN_DOCKER_IMAGE: conanio/gcc8
+       CONAN_BUILD_TYPES: Release
+       CONAN_ARCHS: x86_64
+
+    - <<: *linux_build
+      env:
+       CONAN_GCC_VERSIONS: 8
+       CONAN_DOCKER_IMAGE: conanio/gcc8
+       CONAN_BUILD_TYPES: Debug
+       CONAN_ARCHS: x86_64
+
+    - <<: *linux_build
+      env:
+       CONAN_GCC_VERSIONS: 8
+       CONAN_DOCKER_IMAGE: conanio/gcc8
+       CONAN_BUILD_TYPES: Release
+       CONAN_ARCHS: x86
+
+    - <<: *linux_build
+      env:
+       CONAN_GCC_VERSIONS: 8
+       CONAN_DOCKER_IMAGE: conanio/gcc8
+       CONAN_BUILD_TYPES: Debug
+       CONAN_ARCHS: x86
+
+    - <<: *linux_build
+      env:
+       CONAN_GCC_VERSIONS: 9
+       CONAN_DOCKER_IMAGE: conanio/gcc9
+       CONAN_BUILD_TYPES: Release
+       CONAN_ARCHS: x86_64
+
+    - <<: *linux_build
+      env:
+       CONAN_GCC_VERSIONS: 9
+       CONAN_DOCKER_IMAGE: conanio/gcc9
+       CONAN_BUILD_TYPES: Debug
+       CONAN_ARCHS: x86_64
+
+    - <<: *linux_build
+      env:
+       CONAN_GCC_VERSIONS: 9
+       CONAN_DOCKER_IMAGE: conanio/gcc9
+       CONAN_BUILD_TYPES: Release
+       CONAN_ARCHS: x86
+
+    - <<: *linux_build
+      env:
+       CONAN_GCC_VERSIONS: 9
+       CONAN_DOCKER_IMAGE: conanio/gcc9
+       CONAN_BUILD_TYPES: Debug
        CONAN_ARCHS: x86
 
 install:
