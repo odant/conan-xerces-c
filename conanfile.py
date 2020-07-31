@@ -15,6 +15,7 @@ class XercesConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     options = {
         "shared": [True, False],
+        "fPIC": [True, False],
         "dll_sign": [True, False],
         "with_unit_tests": [True, False],
         "ninja": [True, False],
@@ -22,6 +23,7 @@ class XercesConan(ConanFile):
     }
     default_options = {
         "shared": True,
+        "fPIC": True,
         "dll_sign": True,
         "with_unit_tests": False,
         "ninja": True,
@@ -63,9 +65,6 @@ class XercesConan(ConanFile):
         cmake.definitions["transcoder"] = "icu"
         cmake.definitions["message-loader"] = "inmemory"
         cmake.definitions["xmlch-type"] = self.options.xmlch
-        cmake.definitions["BUILD_SHARED_LIBS:BOOL"] = "ON" if self.options.shared == True else "OFF"
-        if self.settings.os == "Linux":
-            cmake.definitions["CMAKE_POSITION_INDEPENDENT_CODE:BOOL"] = "ON"
         if self.options.with_unit_tests:
             cmake.definitions["WITH_UNIT_TESTS"] = "ON"
             cmake.definitions["AXT_WORKING_DIRECTORY"] = os.path.join(self.source_folder, "src/samples/data").replace("\\", "/")
