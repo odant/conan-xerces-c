@@ -73,7 +73,7 @@ class XercesConan(ConanFile):
         cmake.configure()
         cmake.build()
         cmake.install()
-        if self.options.with_unit_tests:
+        if self.options.with_unit_tests and self.deps_cpp_info["icu"].bin_paths:
             if self.settings.os == "Windows":
                 self.output.info("Import ICU DLLs")
                 icu_dll = os.path.join(self.deps_cpp_info["icu"].bin_paths[0], "*.dll")
