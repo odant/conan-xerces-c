@@ -83,9 +83,9 @@ class XercesConan(ConanFile):
                 for f in glob.glob(icu_dll):
                     self.output.info("Copy %s to %s" % (f, build_bin))
                     shutil.copy(f, build_bin)
-                self.run("ctest --build-config %s" % self.settings.build_type)
+                self.run("ctest --output-on-failure --build-config %s" % self.settings.build_type)
             else:
-                self.run("ctest")
+                self.run("ctest --output-on-failure")
 
     def package_id(self):
         self.info.options.with_unit_tests = "any"
