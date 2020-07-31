@@ -67,7 +67,7 @@ class XercesConan(ConanFile):
         if self.settings.os == "Linux":
             cmake.definitions["CMAKE_POSITION_INDEPENDENT_CODE:BOOL"] = "ON"
         if self.options.with_unit_tests:
-            cmake.definitions["with_unit_tests"] = "ON"
+            cmake.definitions["WITH_UNIT_TESTS"] = "ON"
             cmake.definitions["AXT_WORKING_DIRECTORY"] = os.path.join(self.source_folder, "src/samples/data").replace("\\", "/")
         #
         cmake.configure()

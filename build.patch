@@ -1,5 +1,5 @@
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index 4254f89bb..24becf3eb 100644
+index 4254f89bb..ef0e2c9b1 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
 @@ -112,7 +112,6 @@ set(EXTRA_DIST
@@ -10,7 +10,7 @@ index 4254f89bb..24becf3eb 100644
  include(XercesIncludes)
  include(XercesFunctions)
  include(XercesDLL)
-@@ -159,26 +158,9 @@ configure_file(
+@@ -159,26 +158,11 @@ configure_file(
    ${CMAKE_CURRENT_BINARY_DIR}/doc/style/dtd/entities.ent
    @ONLY)
  
@@ -32,8 +32,11 @@ index 4254f89bb..24becf3eb 100644
  # Process subdirectories
 -add_subdirectory(doc)
  add_subdirectory(src)
- add_subdirectory(tests)
+-add_subdirectory(tests)
 -add_subdirectory(samples)
++if (${WITH_UNIT_TESTS})
++    add_subdirectory(tests)
++endif()
  
  # Display configuration summary
  message(STATUS "")
