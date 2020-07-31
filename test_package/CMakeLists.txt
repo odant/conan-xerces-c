@@ -15,6 +15,11 @@ enable_testing()
 
 add_executable(CreateDOMDocument_CONAN_PKG CreateDOMDocument.cpp)
 target_link_libraries(CreateDOMDocument_CONAN_PKG CONAN_PKG::xerces-c)
+set_target_properties(CreateDOMDocument_CONAN_PKG
+    PROPERTIES
+    INSTALL_RPATH "$ORIGIN"
+    BUILD_WITH_INSTALL_RPATH True
+)
 add_test(
     NAME CreateDOMDocument_CONAN_PKG
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin
@@ -27,6 +32,11 @@ add_test(
 find_package(XercesC REQUIRED)
 add_executable(CreateDOMDocument CreateDOMDocument.cpp)
 target_link_libraries(CreateDOMDocument XercesC::XercesC)
+set_target_properties(CreateDOMDocument
+    PROPERTIES
+    INSTALL_RPATH "$ORIGIN"
+    BUILD_WITH_INSTALL_RPATH True
+)
 add_test(
     NAME CreateDOMDocument
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin

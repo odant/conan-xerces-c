@@ -10,6 +10,11 @@ class PackageTestConan(ConanFile):
     generators = "cmake"
     requires = "ninja/1.9.0"
 
+    def imports(self):
+        self.copy("*.pdb", dst="bin", src="bin")
+        self.copy("*.dll", dst="bin", src="bin")
+        self.copy("*.so*", dst="bin", src="lib")
+
     def build(self):
         cmake = CMake(self, generator="Ninja", msbuild_verbosity='normal')
         cmake.verbose = True
