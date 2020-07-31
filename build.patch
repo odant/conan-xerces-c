@@ -40,3 +40,44 @@ index 4254f89bb..ef0e2c9b1 100644
  
  # Display configuration summary
  message(STATUS "")
+diff --git a/src/src/CMakeLists.txt b/src/src/CMakeLists.txt
+index 344851fad..849fa993f 100644
+--- a/src/src/CMakeLists.txt
++++ b/src/src/CMakeLists.txt
+@@ -1310,36 +1310,12 @@ else()
+ endif()
+ set_target_properties(xerces-c PROPERTIES FOLDER "Library")
+ 
+-if(WIN32)
+-  set(xerces_config_dir "cmake")
+-else()
+-  set(xerces_config_dir "${CMAKE_INSTALL_LIBDIR}/cmake/XercesC")
+-endif()
+-
+ install(TARGETS xerces-c
+-  EXPORT XercesCConfigInternal
+   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+   COMPONENT "runtime"
+   INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
+-install(EXPORT XercesCConfigInternal
+-        DESTINATION "${xerces_config_dir}"
+-        NAMESPACE "xerces_"
+-        COMPONENT "development")
+-
+-include(CMakePackageConfigHelpers)
+-configure_package_config_file(
+-  "${CMAKE_CURRENT_SOURCE_DIR}/XercesCConfig.cmake.in"
+-  "${CMAKE_CURRENT_BINARY_DIR}/XercesCConfig.cmake"
+-  INSTALL_DESTINATION "${xerces_config_dir}")
+-write_basic_package_version_file(
+-  ${CMAKE_CURRENT_BINARY_DIR}/XercesCConfigVersion.cmake
+-  VERSION "${PROJECT_VERSION}"
+-  COMPATIBILITY SameMajorVersion)
+-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/XercesCConfig.cmake
+-              ${CMAKE_CURRENT_BINARY_DIR}/XercesCConfigVersion.cmake
+-              DESTINATION "${xerces_config_dir}")
+ 
+ foreach(hdr IN LISTS libxerces_c_HEADERS)
+   get_filename_component(hdrdir "${hdr}" DIRECTORY)
