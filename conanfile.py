@@ -42,6 +42,8 @@ class XercesConan(ConanFile):
         # DLL sign, only Windows and shared
         if self.settings.os != "Windows" or self.options.shared == False:
             del self.options.dll_sign
+        if self.settings.os == "Windows":
+            del self.options.fPIC
 
     def build_requirements(self):
         if self.options.ninja:
