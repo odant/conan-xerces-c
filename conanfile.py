@@ -85,7 +85,8 @@ class XercesConan(ConanFile):
                     shutil.copy(f, build_bin)
                 self.run("ctest --output-on-failure --build-config %s" % self.settings.build_type)
             else:
-                self.run("ctest --output-on-failure")
+                with tools.environment_append({"LD_LIBRARY_PATH": self.deps_cpp_info["icu"].lib_paths[0]}):
+                    self.run("ctest --output-on-failure")
 
     def package_id(self):
         self.info.options.with_unit_tests = "any"
