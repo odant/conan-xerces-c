@@ -91,6 +91,7 @@ class XercesConan(ConanFile):
 
     def package_id(self):
         self.info.options.with_unit_tests = "any"
+        self.info.options.ninja = "any"
 
     def package(self):
         self.copy("FindXercesC.cmake", dst=".", src=".", keep_path=False)

@@ -153,6 +153,34 @@ matrix:
        CONAN_ARCHS: x86
        CONAN_OPTIONS: xerces-c:with_unit_tests=True,xerces-c:shared=False
 
+    - <<: *linux_build
+      env:
+       CONAN_CLANG_VERSIONS: 9
+       CONAN_DOCKER_IMAGE: conanio/clang9
+       CONAN_BUILD_TYPES: Release
+       CONAN_ARCHS: x86_64
+
+    - <<: *linux_build
+      env:
+       CONAN_CLANG_VERSIONS: 9
+       CONAN_DOCKER_IMAGE: conanio/clang9
+       CONAN_BUILD_TYPES: Debug
+       CONAN_ARCHS: x86_64
+
+    - <<: *linux_build
+      env:
+       CONAN_CLANG_VERSIONS: 9
+       CONAN_DOCKER_IMAGE: conanio/clang9-x86
+       CONAN_BUILD_TYPES: Release
+       CONAN_ARCHS: x86
+
+    - <<: *linux_build
+      env:
+       CONAN_CLANG_VERSIONS: 9
+       CONAN_DOCKER_IMAGE: conanio/clang9-x86
+       CONAN_BUILD_TYPES: Debug
+       CONAN_ARCHS: x86
+
 install:
   - pip install conan
   - pip install conan_package_tools
