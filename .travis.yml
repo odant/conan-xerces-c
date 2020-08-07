@@ -3,7 +3,7 @@ env:
     CONAN_PRINT_RUN_COMMANDS: 1
     CONAN_LOG_RUN_TO_OUTPUT: 1
 
-    CONAN_REFERENCE: xerces-c/3.2.3+0
+    CONAN_REFERENCE: xerces-c/3.2.3+1
     CONAN_USERNAME: odant
     CONAN_CHANNEL: testing
     CONAN_STABLE_CHANNEL: stable
