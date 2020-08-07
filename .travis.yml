@@ -15,6 +15,8 @@ env:
     CONAN_SHARED_OPTION_NAME: False
     CONAN_PURE_C: False
 
+    CONAN_USE_DOCKER: 1
+
 linux: &linux_build
   os: linux
   dist: bionic
@@ -159,6 +161,7 @@ matrix:
        CONAN_DOCKER_IMAGE: conanio/clang9
        CONAN_BUILD_TYPES: Release
        CONAN_ARCHS: x86_64
+       CONAN_OPTIONS: xerces-c:with_unit_tests=True,xerces-c:shared=True
 
     - <<: *linux_build
       env:
@@ -166,6 +169,23 @@ matrix:
        CONAN_DOCKER_IMAGE: conanio/clang9
        CONAN_BUILD_TYPES: Debug
        CONAN_ARCHS: x86_64
+       CONAN_OPTIONS: xerces-c:with_unit_tests=True,xerces-c:shared=True
+
+    - <<: *linux_build
+      env:
+       CONAN_CLANG_VERSIONS: 9
+       CONAN_DOCKER_IMAGE: conanio/clang9
+       CONAN_BUILD_TYPES: Release
+       CONAN_ARCHS: x86_64
+       CONAN_OPTIONS: xerces-c:with_unit_tests=True,xerces-c:shared=False
+
+    - <<: *linux_build
+      env:
+       CONAN_CLANG_VERSIONS: 9
+       CONAN_DOCKER_IMAGE: conanio/clang9
+       CONAN_BUILD_TYPES: Debug
+       CONAN_ARCHS: x86_64
+       CONAN_OPTIONS: xerces-c:with_unit_tests=True,xerces-c:shared=False
 
     - <<: *linux_build
       env:
@@ -173,6 +193,7 @@ matrix:
        CONAN_DOCKER_IMAGE: conanio/clang9-x86
        CONAN_BUILD_TYPES: Release
        CONAN_ARCHS: x86
+       CONAN_OPTIONS: xerces-c:with_unit_tests=True,xerces-c:shared=True
 
     - <<: *linux_build
       env:
@@ -180,6 +201,23 @@ matrix:
        CONAN_DOCKER_IMAGE: conanio/clang9-x86
        CONAN_BUILD_TYPES: Debug
        CONAN_ARCHS: x86
+       CONAN_OPTIONS: xerces-c:with_unit_tests=True,xerces-c:shared=True
+
+    - <<: *linux_build
+      env:
+       CONAN_CLANG_VERSIONS: 9
+       CONAN_DOCKER_IMAGE: conanio/clang9-x86
+       CONAN_BUILD_TYPES: Release
+       CONAN_ARCHS: x86
+       CONAN_OPTIONS: xerces-c:with_unit_tests=True,xerces-c:shared=False
+
+    - <<: *linux_build
+      env:
+       CONAN_CLANG_VERSIONS: 9
+       CONAN_DOCKER_IMAGE: conanio/clang9-x86
+       CONAN_BUILD_TYPES: Debug
+       CONAN_ARCHS: x86
+       CONAN_OPTIONS: xerces-c:with_unit_tests=True,xerces-c:shared=False
 
 install:
   - pip install conan
