@@ -47,7 +47,7 @@ class XercesConan(ConanFile):
 
     def build_requirements(self):
         if self.options.ninja:
-            self.build_requires("ninja/1.9.0")
+            self.build_requires("ninja/[>=1.9.0]")
         if self.options.get_safe("dll_sign"):
             self.build_requires("windows_signtool/[>=1.1]@%s/stable" % self.user)
 
