@@ -30,7 +30,7 @@ class XercesConan(ConanFile):
         "xmlch": "char16_t"
     }
     generators = "cmake"
-    exports_sources = "src/*", "CMakeLists.txt", "build.patch", "FindXercesC.cmake"
+    exports_sources = "src/*", "CMakeLists.txt", "build.patch", "FindXercesC.cmake", "XMLDateTime.patch"
     no_copy_source = True
     build_policy = "missing"
 
@@ -56,6 +56,7 @@ class XercesConan(ConanFile):
 
     def source(self):
         tools.patch(patch_file="build.patch")
+        tools.patch(patch_file="XMLDateTime.patch")
 
     def build(self):
         build_type = "RelWithDebInfo" if self.settings.build_type == "Release" else "Debug"

@@ -1,0 +1,66 @@
+diff --git a/src/src/xercesc/util/XMLDateTime.cpp b/src/src/xercesc/util/XMLDateTime.cpp
+index 4308eeb..928845a 100644
+--- a/src/src/xercesc/util/XMLDateTime.cpp
++++ b/src/src/xercesc/util/XMLDateTime.cpp
+@@ -1270,25 +1270,50 @@ void XMLDateTime::getTimeZone(const XMLSize_t sign)
+     }
+ 
+     //
+-    // otherwise, it has to be this format
++    // else, it has to be this format
+     // '[+|-]'hh:mm
+     //    1   23456 7
+     //   sign      fEnd
+     //
+-    if ( ( ( sign + TIMEZONE_SIZE + 1) != fEnd )      ||
+-         ( fBuffer[sign + 3] != TIMEZONE_SEPARATOR ) )
++    if ( ( ( sign + TIMEZONE_SIZE + 1) == fEnd )      &&
++         ( fBuffer[sign + 3] == TIMEZONE_SEPARATOR ) )
+     {
+-        ThrowXMLwithMemMgr1(SchemaDateTimeException
+-                , XMLExcepts::DateTime_tz_invalid
+-                , fBuffer
+-                , fMemoryManager);
+-        //("Error in parsing time zone");
++        fTimeZone[hh] = parseInt(sign+1, sign+3);
++        fTimeZone[mm] = parseInt(sign+4, fEnd);
++        return;
+     }
+ 
+-    fTimeZone[hh] = parseInt(sign+1, sign+3);
+-    fTimeZone[mm] = parseInt(sign+4, fEnd);
++    //
++    // else, it has to be this format
++    // '[+|-]'hhmm
++    //    1   2345 6
++    //   sign      fEnd
++    //
++    if ( ( sign + (TIMEZONE_SIZE - 1) /* except separator */ + 1) == fEnd  )
++    {
++        fTimeZone[hh] = parseInt(sign+1, sign+3);
++        fTimeZone[mm] = parseInt(sign+3, fEnd);
++        return;
++    }
+ 
+-    return;
++    //
++    // else, it has to be this format
++    // '[+|-]'hh
++    //    1   23 4
++    //   sign    fEnd
++    //
++    if ( ( sign + (TIMEZONE_SIZE - 1 - 2) /* except separator and minutes*/ + 1) == fEnd  )
++    {
++        fTimeZone[hh] = parseInt(sign+1, fEnd);
++        fTimeZone[mm] = 0;
++        return;
++    }
++
++    ThrowXMLwithMemMgr1(SchemaDateTimeException
++            , XMLExcepts::DateTime_tz_invalid
++            , fBuffer
++            , fMemoryManager);
++    //("Error in parsing time zone");
+ }
+ 
+ // ---------------------------------------------------------------------------
