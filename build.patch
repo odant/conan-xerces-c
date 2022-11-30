@@ -2,7 +2,7 @@ diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
 index 4254f89bb..ef0e2c9b1 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
-@@ -112,7 +112,6 @@ set(EXTRA_DIST
+@@ -101,7 +101,6 @@ set(EXTRA_DIST
  )
  
  include(GNUInstallDirs)
@@ -10,7 +10,7 @@ index 4254f89bb..ef0e2c9b1 100644
  include(XercesIncludes)
  include(XercesFunctions)
  include(XercesDLL)
-@@ -159,26 +158,11 @@ configure_file(
+@@ -148,26 +147,11 @@ configure_file(
    ${CMAKE_CURRENT_BINARY_DIR}/doc/style/dtd/entities.ent
    @ONLY)
  
