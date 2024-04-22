@@ -1,7 +1,104 @@
+diff --git a/build.patch b/build.patch
+index 48bbf5e..e69de29 100644
+--- a/build.patch
++++ b/build.patch
+@@ -1,83 +0,0 @@
+-diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+-index 4254f89bb..ef0e2c9b1 100644
+---- a/src/CMakeLists.txt
+-+++ b/src/CMakeLists.txt
+-@@ -101,7 +101,6 @@ set(EXTRA_DIST
+- )
+- 
+- include(GNUInstallDirs)
+--include(XercesWarnings)
+- include(XercesIncludes)
+- include(XercesFunctions)
+- include(XercesDLL)
+-@@ -148,26 +147,11 @@ configure_file(
+-   ${CMAKE_CURRENT_BINARY_DIR}/doc/style/dtd/entities.ent
+-   @ONLY)
+- 
+--# Generate pkg-config file
+--set(pkgconfig-dir "${CMAKE_INSTALL_LIBDIR}/pkgconfig" CACHE STRING "pkg-config installation directory (default ${CMAKE_INSTALL_LIBDIR}/pkgconfig)")
+--set(PKGCONFIGDIR "${pkgconfig-dir}")
+--
+--set(prefix "${CMAKE_INSTALL_PREFIX}")
+--set(exec_prefix "${CMAKE_INSTALL_PREFIX}")
+--set(libdir "${CMAKE_INSTALL_FULL_LIBDIR}")
+--set(includedir "${CMAKE_INSTALL_FULL_INCLUDEDIR}")
+--configure_file(${CMAKE_CURRENT_SOURCE_DIR}/xerces-c.pc.in
+--               ${CMAKE_CURRENT_BINARY_DIR}/xerces-c.pc)
+--install(
+--  FILES ${CMAKE_CURRENT_BINARY_DIR}/xerces-c.pc
+--  DESTINATION "${PKGCONFIGDIR}"
+--  COMPONENT "development")
+--
+- # Process subdirectories
+--add_subdirectory(doc)
+- add_subdirectory(src)
+--add_subdirectory(tests)
+--add_subdirectory(samples)
+-+if (${WITH_UNIT_TESTS})
+-+    add_subdirectory(tests)
+-+endif()
+- 
+- # Display configuration summary
+- message(STATUS "")
+-diff --git a/src/src/CMakeLists.txt b/src/src/CMakeLists.txt
+-index 344851fad..849fa993f 100644
+---- a/src/src/CMakeLists.txt
+-+++ b/src/src/CMakeLists.txt
+-@@ -1310,36 +1310,12 @@ else()
+- endif()
+- set_target_properties(xerces-c PROPERTIES FOLDER "Library")
+- 
+--if(WIN32)
+--  set(xerces_config_dir "cmake")
+--else()
+--  set(xerces_config_dir "${CMAKE_INSTALL_LIBDIR}/cmake/XercesC")
+--endif()
+--
+- install(TARGETS xerces-c
+--  EXPORT XercesCConfigInternal
+-   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+-   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+-   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+-   COMPONENT "runtime"
+-   INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
+--install(EXPORT XercesCConfigInternal
+--        DESTINATION "${xerces_config_dir}"
+--        NAMESPACE "xerces_"
+--        COMPONENT "development")
+--
+--include(CMakePackageConfigHelpers)
+--configure_package_config_file(
+--  "${CMAKE_CURRENT_SOURCE_DIR}/XercesCConfig.cmake.in"
+--  "${CMAKE_CURRENT_BINARY_DIR}/XercesCConfig.cmake"
+--  INSTALL_DESTINATION "${xerces_config_dir}")
+--write_basic_package_version_file(
+--  ${CMAKE_CURRENT_BINARY_DIR}/XercesCConfigVersion.cmake
+--  VERSION "${PROJECT_VERSION}"
+--  COMPATIBILITY SameMajorVersion)
+--install(FILES ${CMAKE_CURRENT_BINARY_DIR}/XercesCConfig.cmake
+--              ${CMAKE_CURRENT_BINARY_DIR}/XercesCConfigVersion.cmake
+--              DESTINATION "${xerces_config_dir}")
+- 
+- foreach(hdr IN LISTS libxerces_c_HEADERS)
+-   get_filename_component(hdrdir "${hdr}" DIRECTORY)
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index 4254f89bb..ef0e2c9b1 100644
+index 33bc40f..2d2682a 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
+@@ -23,7 +23,7 @@ cmake_minimum_required(VERSION 3.12.0)
+ 
+ # Try C++14, then fall back to C++11 and C++98.  Used for feature tests
+ # for optional features.
+-set(CMAKE_CXX_STANDARD 14)
++set(CMAKE_CXX_STANDARD 17)
+ 
+ # Use folders (for IDE project grouping)
+ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 @@ -101,7 +101,6 @@ set(EXTRA_DIST
  )
  
@@ -41,7 +138,7 @@ index 4254f89bb..ef0e2c9b1 100644
  # Display configuration summary
  message(STATUS "")
 diff --git a/src/src/CMakeLists.txt b/src/src/CMakeLists.txt
-index 344851fad..849fa993f 100644
+index aef3a76..2f97228 100644
 --- a/src/src/CMakeLists.txt
 +++ b/src/src/CMakeLists.txt
 @@ -1310,36 +1310,12 @@ else()
