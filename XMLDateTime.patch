@@ -1,7 +1,7 @@
 diff --git a/src/src/xercesc/util/XMLDateTime.cpp b/src/src/xercesc/util/XMLDateTime.cpp
 index 4308eeb..928845a 100644
---- a/src/src/xercesc/util/XMLDateTime.cpp
-+++ b/src/src/xercesc/util/XMLDateTime.cpp
+--- a/src/xercesc/util/XMLDateTime.cpp
++++ b/src/xercesc/util/XMLDateTime.cpp
 @@ -1270,25 +1270,50 @@ void XMLDateTime::getTimeZone(const XMLSize_t sign)
      }
  
